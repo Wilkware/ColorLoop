@@ -1,0 +1,15 @@
+{
+    "id": "{67B80A2C-0E39-B6B3-E767-86E6C9AE653C}",
+    "name": "Color Loop",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "ColorLoop",
+        "Farbverlauf"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "WWXCL",
+    "url": "https://github.com/Wilkware/IPSymconColorLoop"
+}
