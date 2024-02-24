@@ -2,9 +2,9 @@
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20230728-orange.svg?style=flat-square)](https://github.com/Wilkware/IPSymconColorLoop)
+[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20230728-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/IPSymconColorLoop/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/IPSymconColorLoop/actions)
+[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
 
 Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Farbwechsel zu aktivieren. Sobald er aktiviert ist, läuft eine kontinuierliche Schleife durch verschiedene Farben, die sich fortlaufend wiederholt.  
 
@@ -44,7 +44,7 @@ Gute Effekte kann man erzielen bei kleiner Schrittweite (5) und einem sehr langs
 
 * Über den Modul Store das Modul _Color Loop_ installieren.
 * Alternativ Über das Modul-Control folgende URL hinzufügen.  
-`https://github.com/Wilkware/IPSymconColorLoop` oder `git://github.com/Wilkware/IPSymconColorLoop.git`
+`https://github.com/Wilkware/ColorLoop` oder `git://github.com/Wilkware/ColorLoop.git`
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
