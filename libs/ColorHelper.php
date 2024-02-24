@@ -57,7 +57,7 @@ trait ColorHelper
     {
         $str = preg_replace('~[^0-9a-f]~', '', $str);
         $rgb = str_split($str, 2);
-        for($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $rgb[$i] = intval($rgb[$i], 16);
         }
         return $rgb;
@@ -90,13 +90,13 @@ trait ColorHelper
                 case $r:
                     $h = 60 * fmod((($g - $b) / $d), 6);
                     if ($b > $g) $h += 360;
-                break;
+                    break;
                 case $g:
                     $h = 60 * (($b - $r) / $d + 2);
                     break;
                 case $b:
                     $h = 60 * (($r - $g) / $d + 4);
-                break;
+                    break;
             }
         }
         return [intval(round($h, 0)), intval(round($s * 100, 0)), intval(round($l * 100, 0))];
@@ -117,17 +117,29 @@ trait ColorHelper
         $x = $c * (1 - abs(fmod(($h / 60), 2) - 1));
         $m = ($l / 100) - ($c / 2);
         if ($h < 60) {
-            $r = $c; $g = $x; $b = 0;
+            $r = $c;
+            $g = $x;
+            $b = 0;
         } elseif ($h < 120) {
-            $r = $x; $g = $c; $b = 0;
+            $r = $x;
+            $g = $c;
+            $b = 0;
         } elseif ($h < 180) {
-            $r = 0; $g = $c; $b = $x;
+            $r = 0;
+            $g = $c;
+            $b = $x;
         } elseif ($h < 240) {
-            $r = 0; $g = $x; $b = $c;
+            $r = 0;
+            $g = $x;
+            $b = $c;
         } elseif ($h < 300) {
-            $r = $x; $g = 0; $b = $c;
+            $r = $x;
+            $g = 0;
+            $b = $c;
         } else {
-            $r = $c; $g = 0; $b = $x;
+            $r = $c;
+            $g = 0;
+            $b = $x;
         }
         return [floor(($r + $m) * 255), floor(($g + $m) * 255), floor(($b + $m) * 255)];
     }

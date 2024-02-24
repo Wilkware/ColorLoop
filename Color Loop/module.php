@@ -45,21 +45,21 @@ class ColorLoop extends IPSModule
         // Status variable (active)
         $exists = @$this->GetIDForIdent('active');
         $this->RegisterVariableBoolean('active', $this->Translate('Active'), '~Switch', 0);
-        if($exists === false) {
+        if ($exists === false) {
             $this->SetValueBoolean('active', true);
         }
         $this->EnableAction('active');
         // Status variable (increment)
         $exists = @$this->GetIDForIdent('increment');
         $this->RegisterVariableInteger('increment', $this->Translate('Increment'), 'WWXCL.Increment', 1);
-        if($exists === false) {
+        if ($exists === false) {
             $this->SetValueInteger('increment', 5);
         }
         $this->EnableAction('increment');
         // Status variable (transition)
         $exists = @$this->GetIDForIdent('transition');
         $vid = $this->RegisterVariableInteger('transition', $this->Translate('Transition'), 'WWXCL.Transition', 2);
-        if($exists === false) {
+        if ($exists === false) {
             $this->SetValueInteger('transition', 5);
         }
         $this->EnableAction('transition');
@@ -119,11 +119,11 @@ class ColorLoop extends IPSModule
         foreach ($list as &$line) {
             if (IPS_VariableExists($line['Variable'])) {
                 $this->RegisterReference($line['Variable']);
-                if($this->GetVariableProfile($line['Variable']) != '~HexColor') {
+                if ($this->GetVariableProfile($line['Variable']) != '~HexColor') {
                     $this->SendDebug(__FUNCTION__, $line['Variable'] . 'has wrong Profile!');
                     $profile = false;
                 }
-                if(empty($line['Name'])) {
+                if (empty($line['Name'])) {
                     $this->SendDebug(__FUNCTION__, $line['Variable'] . 'has no Name!');
                     $name = false;
                 }
@@ -136,12 +136,12 @@ class ColorLoop extends IPSModule
             }
         }
         // No lights
-        if($count == 0) {
+        if ($count == 0) {
             $this->SetStatus(202);
             return;
         }
         // Wrong Profile
-        if($profile != true) {
+        if ($profile != true) {
             $this->SetStatus(203);
             return;
         }
@@ -222,7 +222,7 @@ class ColorLoop extends IPSModule
             default:
                 // should only be 'color_xxxxx'
                 $this->SetValueInteger($ident, $value);
-            break;
+                break;
         }
         return true;
     }
@@ -235,11 +235,11 @@ class ColorLoop extends IPSModule
     private function Active($value)
     {
         $this->SendDebug(__FUNCTION__, $value);
-        if($value) { // Acvitvate
+        if ($value) { // Acvitvate
             $vid = $this->ReadPropertyInteger('StateVariable');
             if (IPS_VariableExists($vid)) {
                 $value = GetValue($vid); // no modul getvalue!!!
-                if($value) {
+                if ($value) {
                     $this->SendDebug(__FUNCTION__, 'Activate now!');
                     $this->Switch(true);
                 } else {
@@ -262,14 +262,14 @@ class ColorLoop extends IPSModule
         $this->SendDebug(__FUNCTION__, ($value ? 'true' : 'false'));
         $cact = $this->ReadPropertyBoolean('CheckActive');
         $ccon = $this->ReadPropertyBoolean('CheckContinue');
-        if($value) { // ON
+        if ($value) { // ON
             $ison = $this->GetValue('active');
-            if($cact && !$ison) {
+            if ($cact && !$ison) {
                 $ison = true;
                 $this->SetValueBoolean('active', $ison);
             }
             // only if color loop is active switched!
-            if($ison) {
+            if ($ison) {
                 $tran = $this->GetValue('transition');
                 $this->SendDebug(__FUNCTION__, 'Trans: ' . $tran);
                 $ccol = $this->ReadPropertyBoolean('CheckColor');
@@ -285,14 +285,14 @@ class ColorLoop extends IPSModule
                         $color = $this->GetValue($ident);
                     }
                     // color is transparent then from light
-                    if($color == -1) {
+                    if ($color == -1) {
                         $color = GetValue($varid);
                     }
                     $data[] = [$varid, $color];
                 }
                 $this->SendDebug(__FUNCTION__, 'Data: ' . print_r($data, true), 0);
                 $buffer = $this->GetBuffer('loop_data');
-                if(!$ccon || empty($buffer)) {
+                if (!$ccon || empty($buffer)) {
                     $this->SetBuffer('loop_data', serialize($data));
                 }
                 // Start Timer
@@ -301,7 +301,7 @@ class ColorLoop extends IPSModule
         } else { // OFF
             $this->SetTimerInterval('ColorLoopTrigger', 0);
             // continue with the last colors?
-            if(!$ccon) {
+            if (!$ccon) {
                 $this->SetBuffer('loop_data', '');
             }
         }
@@ -318,7 +318,7 @@ class ColorLoop extends IPSModule
         $step = $this->GetValue('increment');
         $this->SendDebug(__FUNCTION__, 'Step size: ' . $step);
         $next = [];
-        foreach($last as $index => $data) {
+        foreach ($last as $index => $data) {
             $this->SendDebug(__FUNCTION__, '(1): ' . $data[1]);
             $rgb = $this->int2rgb($data[1]);
             $this->SendDebug(__FUNCTION__, '(2): ' . $rgb[0] . ', ' . $rgb[1] . ', ' . $rgb[2]);
