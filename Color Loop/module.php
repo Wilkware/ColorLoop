@@ -37,9 +37,11 @@ class ColorLoop extends IPSModule
         $this->RegisterPropertyString('ColorVariables', '[]');
         // Settings
         $this->RegisterPropertyBoolean('CheckColor', false);
+        $this->RegisterPropertyBoolean('CheckActive', false);
+        $this->RegisterPropertyBoolean('CheckContinue', false);
         // Profiles
-        $this->RegisterProfile(VARIABLETYPE_INTEGER, 'WWXCL.Increment', 'Speedo', '', '', 5, 355, 5, 0);
-        $this->RegisterProfile(VARIABLETYPE_INTEGER, 'WWXCL.Transition', 'Repeat', '', '', 0, 0, 0, 0, $this->assoTransition);
+        $this->RegisterProfileInteger('WWXCL.Increment', 'Speedo', '', '', 5, 355, 5);
+        $this->RegisterProfileInteger('WWXCL.Transition', 'Repeat', '', '', 0, 0, 0, $this->assoTransition);
         // Status variable (active)
         $exists = @$this->GetIDForIdent('active');
         $this->RegisterVariableBoolean('active', $this->Translate('Active'), '~Switch', 0);
@@ -258,8 +260,14 @@ class ColorLoop extends IPSModule
     private function Switch($value)
     {
         $this->SendDebug(__FUNCTION__, ($value ? 'true' : 'false'));
+        $cact = $this->ReadPropertyBoolean('CheckActive');
+        $ccon = $this->ReadPropertyBoolean('CheckContinue');
         if($value) { // ON
             $ison = $this->GetValue('active');
+            if($cact && !$ison) {
+                $ison = true;
+                $this->SetValueBoolean('active', $ison);
+            }
             // only if color loop is active switched!
             if($ison) {
                 $tran = $this->GetValue('transition');
@@ -283,13 +291,19 @@ class ColorLoop extends IPSModule
                     $data[] = [$varid, $color];
                 }
                 $this->SendDebug(__FUNCTION__, 'Data: ' . print_r($data, true), 0);
-                $this->SetBuffer('loop_data', serialize($data));
+                $buffer = $this->GetBuffer('loop_data');
+                if(!$ccon || empty($buffer)) {
+                    $this->SetBuffer('loop_data', serialize($data));
+                }
                 // Start Timer
                 $this->SetTimerInterval('ColorLoopTrigger', $tran * 1000);
             }
         } else { // OFF
             $this->SetTimerInterval('ColorLoopTrigger', 0);
-            $this->SetBuffer('loop_data', '');
+            // continue with the last colors?
+            if(!$ccon) {
+                $this->SetBuffer('loop_data', '');
+            }
         }
     }
 

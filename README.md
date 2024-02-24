@@ -1,10 +1,10 @@
 # Farbeverlauf (Color Loop)
 
-[![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-[![Product](https://img.shields.io/badge/Symcon%20Version-6.0%20%3E-blue.svg)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20230728-orange.svg)](https://github.com/Wilkware/IPSymconColorLoop)
-[![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![Actions](https://github.com/Wilkware/IPSymconColorLoop/workflows/Check%20Style/badge.svg)](https://github.com/Wilkware/IPSymconColorLoop/actions)
+[![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
+[![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
+[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20230728-orange.svg?style=flat-square)](https://github.com/Wilkware/IPSymconColorLoop)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/IPSymconColorLoop/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/IPSymconColorLoop/actions)
 
 Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Farbwechsel zu aktivieren. Sobald er aktiviert ist, läuft eine kontinuierliche Schleife durch verschiedene Farben, die sich fortlaufend wiederholt.  
 
@@ -37,7 +37,7 @@ Gute Effekte kann man erzielen bei kleiner Schrittweite (5) und einem sehr langs
 
 ### 2. Voraussetzungen
 
-* IP-Symcon ab Version 6.0
+* IP-Symcon ab Version 6.4
 * Getestet mit Philips Hue Color Ambiance Leuchtmitteln
 
 ### 3. Installation
@@ -65,9 +65,9 @@ Schaltervariable                | Die Schaltvariable, welche als Indikator für 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
 Leuchtgruppe (Liste)            | Alle Geräte, welche an der Farbschleife beteiligt seien sollen
-|- Statusvariable               | Statusvariable des Leuchtmittels, welche die Farbe abbildet. Muss sich über RequestAction steuern lassen und das Profil _~HexColor_ besitzen.
-|- Startfarbe                   | Farbwert mit dem die Farbschleife beginnen soll. Die Farbauswahl 'Transparent' bewirkt die Verwendung des aktuell eingestellten Farbcodes des Leuchtmittels als Startfarbe.
-|- Leuchtenname                 | Der Leuchtenname ist nur notwendig wenn man die Startfarbe auch über das WebFront ändern möchte (Statusvariable).
+-- Statusvariable                 | Statusvariable des Leuchtmittels, welche die Farbe abbildet. Muss sich über RequestAction steuern lassen und das Profil _~HexColor_ besitzen.
+-- Startfarbe                   | Farbwert mit dem die Farbschleife beginnen soll. Die Farbauswahl 'Transparent' bewirkt die Verwendung des aktuell eingestellten Farbcodes des Leuchtmittels als Startfarbe.
+-- Leuchtenname                 | Der Leuchtenname ist nur notwendig wenn man die Startfarbe auch über das WebFront ändern möchte (Statusvariable).
 
 > Erweiterte Einstellungen ...
 
@@ -84,7 +84,7 @@ Name                          | Typ       | Beschreibung
 Aktiv                         | Boolean   | Schalter für Aktivierung oder Deaktivierung der Farbschleife, d.h. soll Farbschleife starten wenn Leuchtgruppe angeschaltet wird.
 Schrittweite                  | Integer   | Auswahl, wie groß die Farbänderungsschritte erfolgen soll (in 5er Schritten zwischen 5 und 355).
 Übergang                      | String    | Auswahl, wie schnell der einzelne Farbwechsel erfolgen soll.
-[Leuchtenname]                | Integer   | Aktivierbar über die erweiterten Einstellungen. Startfarbe fürs WebFront.
+\[Leuchtenname\]                | Integer   | Aktivierbar über die erweiterten Einstellungen. Startfarbe fürs WebFront.
 
 Folgendes Profil wird angelegt:
 
@@ -102,6 +102,13 @@ Man kann die Statusvariablen direkt im WF verlinken.
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
 ### 8. Versionshistorie
+
+v1.1.20240224
+
+* _NEU_: Farbschleife kann automatisch mit Gerät eingeschaltet werden
+* _NEU_: Farbschleife kann bei Wiedereinschalten auf letzte Farbwerte aufsetzen
+* _FIX_: Interne Bibliotheken überarbeitet
+* _FIX_: Internes Deployment überarbeitet
 
 v1.0.20230728
 

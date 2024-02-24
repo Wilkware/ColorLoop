@@ -114,6 +114,16 @@
                     "type": "CheckBox",
                     "name": "CheckColor",
                     "caption": "Create variables for selection of start color per luminaire?"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "CheckActive",
+                    "caption": "Activate color loop automatically when the device is switched on?"
+                },
+                {
+                    "type": "CheckBox",
+                    "name": "CheckContinue",
+                    "caption": "Continue color loop with last color values?"
                 }
             ]
         }

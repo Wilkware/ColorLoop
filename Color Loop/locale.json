@@ -1,6 +1,7 @@
 {
     "translations": {
         "de": {
+            "Color Loop": "Farbverlauf",
             "\nColor Loop\n ": "\nFarbverlauf\n ",
             "The module offers the possibility to activate an automatic colour gradient or a colour change.": "Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Farbwechsel zu aktivieren.",
             "Circuit ...": "Schaltung ...",
@@ -18,6 +19,8 @@
             "Advanced settings ...": "Erweiterte Einstellungen ...",
             "Create variables for selection of start color per luminaire?": "Variablen für Auswahl der Startfarbe pro Leuchte anlegen?",
             "In addition, create a normal switch variable to temporarily switch the colour loop on or off (e.g. for webfront)?": "Zusätzlich noch eine normale Schaltervariable anlegen zum temporären An- bzw. Ausschalten der Farbschleife (z.B. für Webfront)?",
+            "Continue color loop with last color values?": "Farbschleife mit den letzten Farbwerten fortsetzen?",
+            "Activate color loop automatically when the device is switched on?": "Farbschleife beim Einschalten des Geräts automatisch aktivieren?",
             "Transition": "Übergang",
             "Increment": "Schrittweite",
             "Fast": "Schnell",
