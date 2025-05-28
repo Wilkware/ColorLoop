@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20230728-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
+[![Version](https://img.shields.io/badge/Modul%20Version-1.1.20240224-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
 
@@ -15,7 +15,7 @@ Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Fa
 3. [Installation](#user-content-3-installation)
 4. [Einrichten der Instanzen in IP-Symcon](#user-content-4-einrichten-der-instanzen-in-ip-symcon)
 5. [Statusvariablen und Profile](#user-content-5-statusvariablen-und-profile)
-6. [WebFront](#user-content-6-webfront)
+6. [Visualisierung](#user-content-6-visualisierung)
 7. [PHP-Befehlsreferenz](#user-content-7-php-befehlsreferenz)
 8. [Versionshistorie](#user-content-8-versionshistorie)
 
@@ -93,7 +93,7 @@ Name                 | Typ       | Beschreibung
 WWXCL.Increment      | Integer   | Schrittweite (5 - 355)
 WWXCL.Transition     | Integer   | Übergang in Sekunden (2, 5, 8 und 12)
 
-### 6. WebFront
+### 6. Visualisierung
 
 Man kann die Statusvariablen direkt im WF verlinken.
 
