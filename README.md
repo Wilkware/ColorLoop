@@ -4,7 +4,7 @@
 [![Product](https://img.shields.io/badge/Symcon%20Version-8.1-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
 [![Version](https://img.shields.io/badge/Modul%20Version-2.0.20250610-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/style.yml?branch=main&label=CI&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
+[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
 
 Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Farbwechsel zu aktivieren. Sobald er aktiviert ist, läuft eine kontinuierliche Schleife durch verschiedene Farben, die sich fortlaufend wiederholt.  
 
