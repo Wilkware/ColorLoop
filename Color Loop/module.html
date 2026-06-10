@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sep {
+            height: 0.5px;
+            background: color-mix(in srgb, var(--accent-color) 25%, transparent);
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+
+        /* ── ZONE 1: Buttons ── */
+        .zone-top {
+            flex-shrink: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--content-color) 5%, transparent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: color-mix(in srgb, var(--content-color) 45%, transparent);
+            flex-shrink: 0;
+            transition: background .15s, color .15s;
+        }
+
+        .icon-btn.on {
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            color: var(--accent-color);
+        }
+
+        .sw-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 25%;
+            background: color-mix(in srgb, var(--content-color) 5%, transparent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: color-mix(in srgb, var(--content-color) 45%, transparent);
+            flex-shrink: 0;
+            transition: background .15s, color .15s;
+        }
+
+        .sw-btn.on {
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            color: var(--accent-color);
+        }
+
+        .ico {
+            width: 15px;
+            height: 15px;
+            display: block;
+            pointer-events: none;
+            flex-shrink: 0;
+        }
+
+        /* ── ZONE 2: Dots ── */
+        .zone-mid {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* Platz für ✕-Badge-Überhang */
+            padding: 6px 4px;
+        }
+
+        /* Grid: Spalten + Gap per JS gesetzt */
+        .color-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+            gap: 8px;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Dot-Wrapper: Größe komplett per JS in px */
+        .dot-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .dot-wrap input[type="color"] {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid;
+            border-color: color-mix(in srgb, var(--content-color) 20%, transparent);
+            padding: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background: none;
+            outline: none;
+            transition: border-color .15s;
+        }
+
+        .dot-wrap input[type="color"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        /* Webkit */
+        .dot-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .dot-wrap input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        /* Firefox */
+        .dot-wrap input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        /* Transparenter Dot – wrapper trägt Border und + Label */
+        .dot-empty {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px dashed color-mix(in srgb, var(--content-color) 30%, transparent);
+        }
+
+        /* + Label */
+        .dot-empty::after {
+            content: '+';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: color-mix(in srgb, var(--content-color) 40%, transparent);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        /* Input: füllt den Wrapper, komplett transparent – nur als Tap-Target */
+        .dot-empty input[type="color"] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            opacity: 0;
+        }
+
+        .dot-empty input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .dot-empty input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        .dot-empty input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        /* ✕ Badge – permanent oben rechts, touch-freundlich */
+        .dot-clear {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 34%;
+            height: 34%;
+            min-width: 14px;
+            min-height: 14px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--card-color) 90%, black);
+            border: 1.5px solid color-mix(in srgb, var(--content-color) 25%, transparent);
+            color: color-mix(in srgb, var(--content-color) 60%, transparent);
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            line-height: 1;
+            transition: background .15s, color .15s, border-color .15s;
+        }
+
+        .dot-clear:active {
+            background: color-mix(in srgb, var(--accent-color) 70%, black);
+            color: var(--content-color);
+            border-color: transparent;
+        }
+
+        /* ── ZONE 3: Slider ── */
+        .zone-bot {
+            flex-shrink: 0;
+        }
+
+        .sldr-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .sldr-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .sldr-val {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--content-color);
+            min-width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        input[type=range] {
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            outline: none;
+            border: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--content-color);
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+
+        <!-- ZONE 1 -->
+        <div class="zone-top">
+            <div class="header">
+                <button class="icon-btn" id="btn-active">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v9" />
+                        <path d="M18.4 5.6a9 9 0 1 1-12.8 0" />
+                    </svg>
+                </button>
+                <div style="flex:1"></div>
+                <button class="sw-btn" id="btn-autostart">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2z" />
+                    </svg>
+                </button>
+                <button class="sw-btn" id="btn-resume">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.54 2.6L21 8" />
+                        <path d="M21 3v5h-5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="sep"></div>
+        </div>
+
+        <!-- ZONE 2: Dots -->
+        <div class="zone-mid">
+            <div class="color-grid" id="color-grid"></div>
+        </div>
+
+        <!-- ZONE 3: Slider -->
+        <div class="zone-bot">
+            <div class="sep"></div>
+            <div class="sldr-row">
+                <svg class="ico" viewBox="0 0 24 24" fill="none"
+                    stroke="color-mix(in srgb, var(--content-color) 35%, transparent)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                    <path d="M12 19V5m-5 7 5-7 5 7" />
+                </svg>
+                <input type="range" id="slider-step" min="5" max="355" step="5" value="5"
+                    oninput="document.getElementById('val-step').textContent=this.value+'°'">
+                <span class="sldr-val" id="val-step">5°</span>
+            </div>
+            <div class="sldr-row">
+                <svg class="ico" viewBox="0 0 24 24" fill="none"
+                    stroke="color-mix(in srgb, var(--content-color) 35%, transparent)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 3" />
+                </svg>
+                <input type="range" id="slider-speed" min="2" max="20" step="1" value="5"
+                    oninput="document.getElementById('val-speed').textContent=this.value+'s'">
+                <span class="sldr-val" id="val-speed">2s</span>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        let _state;
+
+        const _titles = {
+            'btn-active': 'Color Loop On/Off',
+            'btn-autostart': 'Autostart on power-up',
+            'btn-resume': 'Continue with the last colour',
+            'slider-step': 'Step size',
+            'slider-speed': 'Transition Speed'
+        };
+
+        const MIN_DOT_PX = 28;
+        const MAX_COLS = 4;
+        const GAP = 8;
+        const BADGE_OVERHANG = 6;
+
+        /**
+         * Berechnet optimale Dot-Größe in px.
+         * Berücksichtigt verfügbare Breite UND Höhe der zone-mid.
+         * Bevorzugt eine einzige Reihe wenn die Breite reicht.
+         */
+
+        function calcDotPx(n) {
+            const midEl = document.querySelector('.zone-mid');
+            if (!midEl) return { dotPx: MIN_DOT_PX, cols: 1 };
+
+            // Padding der zone-mid abziehen (2×6px vertikal, 2×4px horizontal)
+            const availW = midEl.clientWidth - BADGE_OVERHANG * 2;
+            const availH = midEl.clientHeight - BADGE_OVERHANG * 2;
+
+            let bestDot = MIN_DOT_PX;
+            let bestCols = 1;
+
+            for (let c = 1; c <= Math.min(n, MAX_COLS); c++) {
+                const rows = Math.ceil(n / c);
+                const dotW = Math.floor((availW - GAP * (c - 1)) / c);
+                const dotH = Math.floor((availH - GAP * (rows - 1)) / rows);
+                const dotPx = Math.min(dotW, dotH);
+                if (dotPx >= MIN_DOT_PX && dotPx > bestDot) {
+                    bestDot = dotPx;
+                    bestCols = c;
+                }
+            }
+
+            return { dotPx: bestDot, cols: bestCols };
+        }
+
+        function applyState() {
+            if (!_state) return;
+            setBtn('btn-active', 'icon-btn', _state.active);
+            setBtn('btn-autostart', 'sw-btn', _state.autostart);
+            setBtn('btn-resume', 'sw-btn', _state.resume);
+            document.getElementById('slider-step').value = _state.step;
+            document.getElementById('val-step').textContent = _state.step + '°';
+            document.getElementById('slider-speed').value = _state.speed;
+            document.getElementById('val-speed').textContent = _state.speed + 's';
+            renderDots();
+        }
+
+        function setBtn(id, cls, on) {
+            document.getElementById(id).classList.toggle('on', on);
+        }
+
+        function setColor(entry, hex) {
+            entry.color = hex;
+            requestAction('color_' + entry.id, hex === '' ? -1 : parseInt(hex.replace('#', ''), 16));
+            renderDots();
+        }
+
+        function renderDots() {
+            const grid = document.getElementById('color-grid');
+            grid.innerHTML = '';
+            const n = _state.colors.length;
+            const { dotPx, cols } = calcDotPx(n);
+
+            // Tatsächliche Anzahl Zeilen damit Grid-Höhe exakt passt
+            const rows = Math.ceil(n / cols);
+            const gridW = cols * dotPx + (cols - 1) * GAP;
+            const gridH = rows * dotPx + (rows - 1) * GAP;
+            grid.style.width = gridW + 'px';
+            grid.style.height = gridH + 'px';
+            grid.style.gap = GAP + 'px';
+
+            const editable = _state.editable !== false; // default true
+
+            _state.colors.forEach((dev) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'dot-wrap';
+                wrap.style.width = dotPx + 'px';
+                wrap.style.height = dotPx + 'px';
+
+                if (!editable) {
+                    // Nur Anzeige – einfaches Div, kein Input, kein Badge
+                    const dot = document.createElement('div');
+                    dot.title = dev.name;
+                    dot.style.cssText = 'width:100%;height:100%;border-radius:50%;' +
+                        (dev.color === ''
+                            ? 'border:2px dashed color-mix(in srgb, var(--content-color) 25%, transparent);'
+                            : 'background:' + dev.color + ';');
+                    wrap.appendChild(dot);
+                } else if (dev.color === '') {
+                    // Editierbar + transparent → Farbwähler zum Befüllen
+                    const emptyWrap = document.createElement('div');
+                    emptyWrap.className = 'dot-empty';
+
+                    const inp = document.createElement('input');
+                    inp.type = 'color';
+                    inp.value = '#ffffff';
+                    inp.title = dev.name + ' (transparent – tippen zum Befüllen)';
+                    inp.addEventListener('change', e => setColor(dev, e.target.value));
+
+                    emptyWrap.appendChild(inp);
+                    wrap.appendChild(emptyWrap);
+                } else {
+                    // Befüllter Dot + ✕ Badge
+                    const inp = document.createElement('input');
+                    inp.type = 'color';
+                    inp.value = dev.color;
+                    inp.title = dev.name;
+                    inp.addEventListener('change', e => setColor(dev, e.target.value));
+
+                    const clear = document.createElement('div');
+                    clear.className = 'dot-clear';
+                    clear.textContent = '✕';
+                    clear.title = dev.name + ' – auf transparent setzen';
+                    clear.addEventListener('click', e => {
+                        e.stopPropagation();
+                        setColor(dev, '');
+                    });
+
+                    wrap.appendChild(inp);
+                    wrap.appendChild(clear);
+                }
+
+                grid.appendChild(wrap);
+            });
+        }
+
+        function handleMessage(data) {
+            _state = JSON.parse(data);
+            applyState();
+        }
+
+        Object.entries(_titles).forEach(([id, text]) => {
+            document.getElementById(id)?.setAttribute('title', translate(text));
+        });
+
+        ['btn-active', 'btn-autostart', 'btn-resume'].forEach(id => {
+            document.getElementById(id).addEventListener('click', () => {
+                const key = id.replace('btn-', '');
+                _state[key] = !_state[key];
+                document.getElementById(id).classList.toggle('on', _state[key]);
+                requestAction(key, _state[key]);
+            });
+        });
+        document.getElementById('slider-step').addEventListener('change', e => {
+            _state.step = parseInt(e.target.value);
+            requestAction('increment', _state.step);
+        });
+        document.getElementById('slider-speed').addEventListener('change', e => {
+            _state.speed = parseInt(e.target.value);
+            requestAction('transition', _state.speed);
+        });
+    </script>
+</body>
+
+</html>

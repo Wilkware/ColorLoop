@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sep {
+            height: 0.5px;
+            background: color-mix(in srgb, var(--accent-color) 25%, transparent);
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+
+        /* ── ZONE 1: Buttons ── */
+        .zone-top {
+            flex-shrink: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--content-color) 5%, transparent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: color-mix(in srgb, var(--content-color) 45%, transparent);
+            flex-shrink: 0;
+            transition: background .15s, color .15s;
+        }
+
+        .icon-btn.on {
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            color: var(--accent-color);
+        }
+
+        .sw-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 25%;
+            background: color-mix(in srgb, var(--content-color) 5%, transparent);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: color-mix(in srgb, var(--content-color) 45%, transparent);
+            flex-shrink: 0;
+            transition: background .15s, color .15s;
+        }
+
+        .sw-btn.on {
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            color: var(--accent-color);
+        }
+
+        .ico {
+            width: 15px;
+            height: 15px;
+            display: block;
+            pointer-events: none;
+            flex-shrink: 0;
+        }
+
+        /* ── ZONE 2: Dots ── */
+        .zone-mid {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--dot-cols, 4), 1fr);
+            gap: clamp(4px, 4%, 12px);
+            width: 100%;
+        }
+
+        /* Wrapper: Breite-basiert quadratisch via padding-top Trick */
+        .dot-wrap {
+            width: 100%;
+            position: relative;
+        }
+
+        .dot-wrap::before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+        }
+
+        /* Color-Input als runder Dot */
+        .dot-wrap input[type="color"] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid;
+            border-color: color-mix(in srgb, var(--content-color) 20%, transparent);
+            padding: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background: none;
+            outline: none;
+            transition: border-color .15s, transform .12s;
+        }
+
+        .dot-wrap input[type="color"]:hover {
+            border-color: color-mix(in srgb, var(--content-color) 50%, transparent);
+        }
+
+        .dot-wrap input[type="color"]:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        /* Webkit: swatch füllt den Button */
+        .dot-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .dot-wrap input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        /* Firefox */
+        .dot-wrap input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        /* ── ZONE 3: Slider ── */
+        .zone-bot {
+            flex-shrink: 0;
+        }
+
+        .sldr-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .sldr-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .sldr-val {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--content-color);
+            min-width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        input[type=range] {
+            flex: 1;
+            min-width: 0;
+            margin: 0;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: color-mix(in srgb, var(--accent-color) 20%, transparent);
+            outline: none;
+            border: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--content-color);
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+
+        <!-- ZONE 1 -->
+        <div class="zone-top">
+            <div class="header">
+                <button class="icon-btn" id="btn-active" title="ColorLoop Ein/Aus">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v9" />
+                        <path d="M18.4 5.6a9 9 0 1 1-12.8 0" />
+                    </svg>
+                </button>
+                <div style="flex:1"></div>
+                <button class="sw-btn" id="btn-autostart" title="Autostart beim Einschalten">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2z" />
+                    </svg>
+                </button>
+                <button class="sw-btn" id="btn-resume" title="Mit letzter Farbe fortsetzen">
+                    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.54 2.6L21 8" />
+                        <path d="M21 3v5h-5" />
+                    </svg>
+                </button>
+            </div>
+            <div class="sep"></div>
+        </div>
+
+        <!-- ZONE 2: Dots -->
+        <div class="zone-mid">
+            <div class="color-grid" id="color-grid"></div>
+        </div>
+
+        <!-- ZONE 3: Slider -->
+        <div class="zone-bot">
+            <div class="sep"></div>
+            <div class="sldr-row">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                    <path d="M12 19V5m-5 7 5-7 5 7" />
+                </svg>
+                <input type="range" id="slider-step" min="5" max="355" step="5" value="5"
+                    oninput="document.getElementById('val-step').textContent=this.value+'°'">
+                <span class="sldr-val" id="val-step">5°</span>
+            </div>
+            <div class="sldr-row">
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M12 7v5l3 3" />
+                </svg>
+                <input type="range" id="slider-speed" min="2" max="20" step="1" value="5"
+                    oninput="document.getElementById('val-speed').textContent=this.value+'s'">
+                <span class="sldr-val" id="val-speed">2s</span>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        let _state;
+
+        /**
+         * Spaltenanzahl basierend auf Anzahl Dots UND verfügbarer Breite.
+         *
+         * Logik:
+         *  - Berechne wie viele Dots nebeneinander passen (max 4, min MIN_DOT_PX)
+         *  - Nimm so viele Spalten wie möglich (= eine Reihe wenn Platz reicht)
+         *  - Nur wenn nicht alle in eine Reihe passen: wähle möglichst
+         *    quadratisches Layout mit minimalen Leerstellen
+         */
+        const MIN_DOT_PX = 32;
+        const MAX_COLS = 4;
+
+        function calcCols(n) {
+            const gridEl = document.getElementById('color-grid');
+            const availW = gridEl ? gridEl.offsetWidth : 200;
+            const gap = 8;
+
+            // Wie viele Spalten passen bei MIN_DOT_PX?
+            const maxByWidth = Math.max(1, Math.min(
+                Math.floor((availW + gap) / (MIN_DOT_PX + gap)),
+                MAX_COLS
+            ));
+
+            // Wenn alle Dots in eine Reihe passen → eine Reihe
+            if (n <= maxByWidth) {
+                console.log(`calcCols: n=${n}, availW=${availW}px, maxByWidth=${maxByWidth} → cols=${n} (score=${Infinity.toFixed(2)})`);
+                return n;
+            }
+
+            // Sonst: finde beste Spaltenanzahl (quadratisch, wenig Reste, mehr Spalten bevorzugt)
+            let best = maxByWidth;
+            let bestScore = Infinity;
+            for (let c = 1; c <= maxByWidth; c++) {
+                const rows = Math.ceil(n / c);
+                const remainder = (c - (n % c)) % c;
+                // Reste stark bestrafen, quadratisch bevorzugen, bei Gleichstand mehr Spalten
+                const score = remainder * 6 + Math.abs(c - rows) - c * 0.01;
+                if (score < bestScore) { bestScore = score; best = c; }
+            }
+            console.log(`calcCols: n=${n}, availW=${availW}px, maxByWidth=${maxByWidth} → cols=${best} (score=${bestScore.toFixed(2)})`);
+            return best;
+        }
+
+        function applyState() {
+            if (!_state) return;
+            setBtn('btn-active', 'icon-btn', _state.active);
+            setBtn('btn-autostart', 'sw-btn', _state.autostart);
+            setBtn('btn-resume', 'sw-btn', _state.resume);
+            document.getElementById('slider-step').value = _state.step;
+            document.getElementById('val-step').textContent = _state.step + '°';
+            document.getElementById('slider-speed').value = _state.speed;
+            document.getElementById('val-speed').textContent = _state.speed + 's';
+
+            renderDots();
+        }
+
+        function setBtn(id, cls, on) {
+            document.getElementById(id).classList.toggle('on', on);
+        }
+
+        function setColor(entry, hex) {
+            entry.color = hex;
+            requestAction('color_' + entry.id, hex === '' ? -1 : parseInt(hex.replace('#', ''), 16));
+            renderDots();
+        }
+
+        function renderDots() {
+            const grid = document.getElementById('color-grid');
+            grid.innerHTML = '';
+            const n = _state.colors.length;
+            const cols = calcCols(n);
+            grid.style.setProperty('--dot-cols', cols);
+            _state.colors.forEach((dev, i) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'dot-wrap';
+
+                if (dev.color === '') {
+                    // Transparenter Dot – Klick öffnet hidden color-input zum Befüllen
+                    const inp = document.createElement('input');
+                    inp.type = 'color';
+                    inp.style.border = '2px dashed var(--content-color)';
+                    inp.style.opacity = '0.2';
+                    inp.title = dev.name + ' (transparent, neue Auswahl nicht rückgängig machbar)';
+                    inp.value = getComputedStyle(document.documentElement).getPropertyValue('--card-color').trim();
+                    inp.addEventListener('change', e => setColor(dev, e.target.value));
+
+                    wrap.appendChild(inp);
+                } else {
+                    // Befüllter Dot: color-input
+                    const inp = document.createElement('input');
+                    inp.type = 'color';
+                    inp.value = dev.color;
+                    inp.title = dev.name;
+                    inp.addEventListener('change', e => setColor(dev, e.target.value));
+
+                    wrap.appendChild(inp);
+                }
+                grid.appendChild(wrap);
+            });
+        }
+
+        ['btn-active', 'btn-autostart', 'btn-resume'].forEach(id => {
+            document.getElementById(id).addEventListener('click', () => {
+                const key = id.replace('btn-', '');
+                _state[key] = !_state[key];
+                document.getElementById(id).classList.toggle('on', _state[key]);
+                requestAction(key, _state[key]);
+            });
+        });
+        document.getElementById('slider-step').addEventListener('change', e => {
+            _state.step = parseInt(e.target.value);
+            requestAction('increment', _state.step);
+        });
+        document.getElementById('slider-speed').addEventListener('change', e => {
+            _state.speed = parseInt(e.target.value);
+            requestAction('transition', _state.speed);
+        });
+
+        // Hier werden die Daten vom Modul verarbeitet.
+        function handleMessage(data) {
+            const decodedData = JSON.parse(data);
+            console.log('Daten:', decodedData);
+            _state = decodedData;
+            applyState();
+        }
+    </script>
+</body>
+
+</html>

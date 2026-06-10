@@ -1,10 +1,10 @@
-# Farbeverlauf (Color Loop)
+# 🎨 Farbeverlauf (Color Loop)
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-[![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-1.1.20240224-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
+[![Product](https://img.shields.io/badge/Symcon%20Version-8.1-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
+[![Version](https://img.shields.io/badge/Modul%20Version-2.0.20250610-orange.svg?style=flat-square)](https://github.com/Wilkware/ColorLoop)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
+[![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/ColorLoop/style.yml?branch=main&label=CI&style=flat-square)](https://github.com/Wilkware/ColorLoop/actions)
 
 Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Farbwechsel zu aktivieren. Sobald er aktiviert ist, läuft eine kontinuierliche Schleife durch verschiedene Farben, die sich fortlaufend wiederholt.  
 
@@ -14,7 +14,7 @@ Das Modul bietet die Möglichkeit, einen automatischen Farbverlauf bzw. einen Fa
 2. [Voraussetzungen](#user-content-2-voraussetzungen)
 3. [Installation](#user-content-3-installation)
 4. [Einrichten der Instanzen in IP-Symcon](#user-content-4-einrichten-der-instanzen-in-ip-symcon)
-5. [Statusvariablen und Profile](#user-content-5-statusvariablen-und-profile)
+5. [Statusvariablen und Darstellungen](#user-content-5-statusvariablen-und-darstellungen)
 6. [Visualisierung](#user-content-6-visualisierung)
 7. [PHP-Befehlsreferenz](#user-content-7-php-befehlsreferenz)
 8. [Versionshistorie](#user-content-8-versionshistorie)
@@ -28,17 +28,17 @@ Im Endeffekt versucht das Modul diesen Effekt nachzubilden.
 * Bilden einer Gruppe über mehrere Leuchtmittel hinweg
 * Starten und stoppen der Schleife über einen hinterlegten Gruppenschalter (z.B. Z2M Group Status)
 * Festlegen der Startfarbe pro Leuchte oder direktes Aufsetzen auf aktuellen Farbwert der Leuchte
-* Steuerung der Funktionalität über das WebFront
-  * Steuerung der Farbschritte und Übergangsgeschwindigkeit
-  * Zeitweises Aktivieren bzw. Deaktivieren der Funktionalität
+* Steuerung der Funktionalität über die Visualisierung
+  * Aktivieren bzw. Deaktivieren der Funktionalität (inkl. Autostart und Fortfahren)
   * Möglichkeit die Startfarbe pro Leuchtmittel festzulegen
+  * Steuerung der Schrittweite und Übergangsgeschwindigkeit
 
 Gute Effekte kann man erzielen bei kleiner Schrittweite (5) und einem sehr langsamen Übergang (12sek)
 
 ### 2. Voraussetzungen
 
-* IP-Symcon ab Version 6.4
-* Getestet mit Philips Hue Color Ambiance Leuchtmitteln
+* IP-Symcon ab Version 8.1
+* Getestet mit verschiedenen Zigbee Leuchtmitteln
 
 ### 3. Installation
 
@@ -48,60 +48,84 @@ Gute Effekte kann man erzielen bei kleiner Schrittweite (5) und einem sehr langs
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
-* Unter 'Instanz hinzufügen' ist das _Color Loop_-Modul (Alias: _Farbverlauf_) unter dem Hersteller '(Geräte)' aufgeführt.
+* Unter 'Instanz hinzufügen' ist das _Color Loop_-Modul (alterantiv: _Farbverlauf_) unter dem Hersteller '(Geräte)' aufgeführt.
 
 __Konfigurationsseite__:
 
 Einstellungsbereich:
 
-> Schaltung ...
+> 🎚️ Schaltung ...
 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
 Schaltervariable                | Die Schaltvariable, welche als Indikator für den Schaltzustand (An/Aus) der ganzen Leuchtgruppe dient.
 
-> Geräte ...
+> 💡 Geräte ...
 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
-Leuchtgruppe (Liste)            | Alle Geräte, welche an der Farbschleife beteiligt seien sollen
--- Statusvariable                 | Statusvariable des Leuchtmittels, welche die Farbe abbildet. Muss sich über RequestAction steuern lassen und das Profil _~HexColor_ besitzen.
+Leuchtmittel (Liste)            | Alle Geräte, welche an der Farbschleife beteiligt seien sollen
+-- Statusvariable               | Statusvariable des Leuchtmittels, welche die Farbe abbildet. Muss sich über RequestAction steuern lassen und das Profil _~HexColor_ oder Darstellung _Farbe_ besitzen.
 -- Startfarbe                   | Farbwert mit dem die Farbschleife beginnen soll. Die Farbauswahl 'Transparent' bewirkt die Verwendung des aktuell eingestellten Farbcodes des Leuchtmittels als Startfarbe.
--- Leuchtenname                 | Der Leuchtenname ist nur notwendig wenn man die Startfarbe auch über das WebFront ändern möchte (Statusvariable).
+-- Leuchtenname                 | Der Leuchtenname hilft in der Visualisierung zur Identifizierung der einzelnen Leuchtmittel.
 
-> Erweiterte Einstellungen ...
+> ⚙️ Erweiterte Einstellungen ...
 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
-Variablen für Auswahl der Startfarbe pro Leuchte anlegen? | Legt pro hinterlegten Leuchtmittel eine Statusvariable an (siehe Leuchtenname) um die Startfarbe über das Webfront festlegen bzw. ändern zu können.
+Sollen Startfarben in der Visualisierung bearbeitbar sein? | Ermöglicht die Bearbeitung der Startfarbe über die Visualisierung (Syncron zur Modulkonfiguration).
 
-### 5. Statusvariablen und Profile
+### 5. Statusvariablen und Darstellungen
 
 Die Statusvariablen werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
 
-Name                          | Typ       | Beschreibung
-------------------------------| --------- | ----------------
-Aktiv                         | Boolean   | Schalter für Aktivierung oder Deaktivierung der Farbschleife, d.h. soll Farbschleife starten wenn Leuchtgruppe angeschaltet wird.
-Schrittweite                  | Integer   | Auswahl, wie groß die Farbänderungsschritte erfolgen soll (in 5er Schritten zwischen 5 und 355).
-Übergang                      | String    | Auswahl, wie schnell der einzelne Farbwechsel erfolgen soll.
-\[Leuchtenname\]                | Integer   | Aktivierbar über die erweiterten Einstellungen. Startfarbe fürs WebFront.
+#### Statusvariablen
 
-Folgendes Profil wird angelegt:
+Name                            | Typ       | Beschreibung
+--------------------------------| --------- | ----------------
+Aktiv                           | Boolean   | Schalter für Aktivierung oder Deaktivierung der Farbschleife
+Schrittweite                    | Integer   | Auswahl, wie groß die Farbänderungsschritte erfolgen soll (in 5er Schritten zwischen 5 und 355).
+Übergang                        | String    | Auswahl, wie schnell der einzelne Farbwechsel erfolgen soll (2..20s)
+Autostart                       | Boolean   | Schalter, ob Farbschleife automatisch starten soll wenn Leuchtgruppe angeschaltet wird.
+Fortsetzen                      | Boolean   | Schalter, ob Farbschleife mit den aktuellen Farbwerten der Leuchtmittel fortgesetzt werden soll.
 
 Name                 | Typ       | Beschreibung
 -------------------- | --------- | ----------------------
 WWXCL.Increment      | Integer   | Schrittweite (5 - 355)
 WWXCL.Transition     | Integer   | Übergang in Sekunden (2, 5, 8 und 12)
 
+#### Darstellungen
+
+Folgende Dartsellungen werden hinterlegt:
+
+Template-Name            | Typ           | Beschreibung
+------------------------ | ------------- | ----------------
+\<direkte Assoziazion\>  | Schieberegler | Übergang (2 .. 20s) in 5er Schritten
+\<direkte Assoziazion\>  | Schieberegler | Schrittweite (5 .. 355°) in 5er Schritten
+\<direkte Assoziazion\>  | Schalter      | Aktiv (An/Aus)
+\<direkte Assoziazion\>  | Schalter      | Autostart (An/Aus)
+\<direkte Assoziazion\>  | Schalter      | Fortsetzen (An/Aus)
+
 ### 6. Visualisierung
 
-Man kann die Statusvariablen direkt im WF verlinken.
+Man kann sowohl das gesamte Modul (HTML-SDK Support) als auch nur die Statusvariablen direkt in der Visualisierung verlinken.
+
+_HINWEIS:_ Das Bearbeiten der Farben erfordert dessen Aktivierung unter _'Erweiterte Einstellungen'_.
 
 ### 7. PHP-Befehlsreferenz
 
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
 ### 8. Versionshistorie
+
+v2.0.20260610
+* _NEU_: Support für TileVisu (Kachel-Visualisierung)
+* _NEU_: Kompatibilität auf IPS 8.1 vereinheitlicht
+* _NEU_: Umstellung auf Strict-Modus (IPSModuleStrict)
+* _NEU_: Umstellung auf Darstellungen
+* _NEU_: Modulversion wird in Quellcodesektion angezeigt
+* _FIX_: Modulkonfiguration überarbeitet und vereinheitlicht
+* _FIX_: Interne Bibliotheken und Konfiguration überarbeitet und vereinheitlicht
 
 v1.1.20240224
 

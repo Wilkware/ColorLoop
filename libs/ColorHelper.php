@@ -22,8 +22,9 @@ trait ColorHelper
     /**
      * Convert color integer value in RGB array
      *
-     * @param mixed $num Color value as integer.
-     * @return array RGB array.
+     * @param int $num Color value as integer.
+     *
+     * @return array{0:int,1:int,2:int} RGB array.
      */
     private function int2rgb(int $num): array
     {
@@ -36,7 +37,8 @@ trait ColorHelper
     /**
      * Convert RGB array in color integer value.
      *
-     * @param array $rgb RGB array
+     * @param array{0:int,1:int,2:int} $rgb RGB array
+     *
      * @return int Color value
      */
     private function rgb2int(array $rgb): int
@@ -51,7 +53,8 @@ trait ColorHelper
      * Convert Hex color string in RGB array.
      *
      * @param string $str Hexadecimal color string
-     * @return array RGB array
+     *
+     * @return array{0: int, 1: int, 2: int} RGB array
      */
     private function str2rgb(string $str): array
     {
@@ -70,7 +73,7 @@ trait ColorHelper
      * @param int $g Green value
      * @param int $b Blue value
      *
-     * @return array RGB array
+     * @return array{0: int, 1: int, 2: int} HSL array
      */
     private function rgb2hsl(int $r, int $g, int $b): array
     {
@@ -97,6 +100,9 @@ trait ColorHelper
                 case $b:
                     $h = 60 * (($r - $g) / $d + 4);
                     break;
+                default:
+                    $h = 0;
+                    break;
             }
         }
         return [intval(round($h, 0)), intval(round($s * 100, 0)), intval(round($l * 100, 0))];
@@ -109,7 +115,7 @@ trait ColorHelper
      * @param int $s Saturation value
      * @param int $l Lightness value
      *
-     * @return array
+     * @return array{0:int,1:int,2:int} RGB array
      */
     private function hsl2rgb(int $h, int $s, int $l): array
     {
@@ -141,6 +147,6 @@ trait ColorHelper
             $g = 0;
             $b = $x;
         }
-        return [floor(($r + $m) * 255), floor(($g + $m) * 255), floor(($b + $m) * 255)];
+        return [intval(floor(($r + $m) * 255)), intval(floor(($g + $m) * 255)), intval(floor(($b + $m) * 255))];
     }
 }
