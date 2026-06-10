@@ -89,19 +89,14 @@ Schrittweite                    | Integer   | Auswahl, wie groß die Farbänderu
 Autostart                       | Boolean   | Schalter, ob Farbschleife automatisch starten soll wenn Leuchtgruppe angeschaltet wird.
 Fortsetzen                      | Boolean   | Schalter, ob Farbschleife mit den aktuellen Farbwerten der Leuchtmittel fortgesetzt werden soll.
 
-Name                 | Typ       | Beschreibung
--------------------- | --------- | ----------------------
-WWXCL.Increment      | Integer   | Schrittweite (5 - 355)
-WWXCL.Transition     | Integer   | Übergang in Sekunden (2, 5, 8 und 12)
-
 #### Darstellungen
 
 Folgende Dartsellungen werden hinterlegt:
 
 Template-Name            | Typ           | Beschreibung
 ------------------------ | ------------- | ----------------
-\<direkte Assoziazion\>  | Schieberegler | Übergang (2 .. 20s) in 5er Schritten
-\<direkte Assoziazion\>  | Schieberegler | Schrittweite (5 .. 355°) in 5er Schritten
+\<direkte Assoziazion\>  | Schieberegler | Übergang (2 .. 20s)
+\<direkte Assoziazion\>  | Schieberegler | Schrittweite (5 .. 355°, in 5er Schritten)
 \<direkte Assoziazion\>  | Schalter      | Aktiv (An/Aus)
 \<direkte Assoziazion\>  | Schalter      | Autostart (An/Aus)
 \<direkte Assoziazion\>  | Schalter      | Fortsetzen (An/Aus)
