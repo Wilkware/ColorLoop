@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/_traits.php'; // Generell funktions
 
+/** Namespaced traits */
+use Wilkware\ColorLoop\ColorHelper;
+use Wilkware\ColorLoop\DebugHelper;
+use Wilkware\ColorLoop\FormatHelper;
+use Wilkware\ColorLoop\VariableHelper;
+
 /**
  * CLASS ColorLoop
  */
