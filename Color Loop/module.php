@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../libs/_traits.php'; // Generell funktions
+/** Generell funktions */
+require_once __DIR__ . '/../libs/_traits.php';
 
 /** Namespaced traits */
 use Wilkware\ColorLoop\ColorHelper;
@@ -15,14 +16,20 @@ use Wilkware\ColorLoop\VariableHelper;
  */
 class ColorLoop extends IPSModuleStrict
 {
+    // -------------------------------------------------------------------------
+    // Traits
+    // -------------------------------------------------------------------------
+
     use ColorHelper;
     use DebugHelper;
     use FormatHelper;
     use VariableHelper;
 
-    /**
-     * @var array<string,mixed> Increment Presentation (Value)
-     */
+    // -------------------------------------------------------------------------
+    // Presentations
+    // -------------------------------------------------------------------------
+
+    /** @var array<string,mixed> Increment Presentation (Value) */
     private const CL_PRESENTATION_INCREMENT = [
         'PRESENTATION'        => VARIABLE_PRESENTATION_SLIDER,
         'USAGE_TYPE'          => 5,
@@ -42,9 +49,7 @@ class ColorLoop extends IPSModuleStrict
         'SUFFIX'              => '°',
     ];
 
-    /**
-     * @var array<string,mixed> Transition Presentation (Slider)
-     */
+    /** @var array<string,mixed> Transition Presentation (Slider) */
     private const CL_PRESENTATION_TRANSITION = [
         'PRESENTATION'        => VARIABLE_PRESENTATION_SLIDER,
         'USAGE_TYPE'          => 5,
@@ -64,9 +69,7 @@ class ColorLoop extends IPSModuleStrict
         'SUFFIX'              => 's',
     ];
 
-    /**
-     * @var array<string,mixed> Switch Presentation (Switch)
-     */
+    /** @var array<string,mixed> Switch Presentation (Switch) */
     private const CL_PRESENTATION_SWITCH = [
         'PRESENTATION'   => VARIABLE_PRESENTATION_SWITCH,
         'USE_ICON_FALSE' => false,
@@ -77,9 +80,7 @@ class ColorLoop extends IPSModuleStrict
         'GLOW_COLOR'     => 16771899,
     ];
 
-    /**
-     * @var array<string,mixed> Autostart Presentation (Switch)
-     */
+    /** @var array<string,mixed> Autostart Presentation (Switch) */
     private const CL_PRESENTATION_AUTOSTART = [
         'PRESENTATION'   => VARIABLE_PRESENTATION_SWITCH,
         'USE_ICON_FALSE' => false,
@@ -90,9 +91,7 @@ class ColorLoop extends IPSModuleStrict
         'GLOW_COLOR'     => 16771899,
     ];
 
-    /**
-     * @var array<string,mixed> Resume Presentation (Switch)
-     */
+    /** @var array<string,mixed> Resume Presentation (Switch) */
     private const CL_PRESENTATION_RESUME = [
         'PRESENTATION'   => VARIABLE_PRESENTATION_SWITCH,
         'USE_ICON_FALSE' => false,
@@ -102,6 +101,10 @@ class ColorLoop extends IPSModuleStrict
         'GLOW_INTENSITY' => 50,
         'GLOW_COLOR'     => 16771899,
     ];
+
+    // -------------------------------------------------------------------------
+    // Methods
+    // -------------------------------------------------------------------------
 
     /**
      * In contrast to Construct, this function is called only once when creating the instance and starting IP-Symcon.
