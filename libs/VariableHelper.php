@@ -18,8 +18,6 @@ declare(strict_types=1);
 
 namespace Wilkware\ColorLoop;
 
-namespace Wilkware\LocalTuya;
-
 /**
  * Helper class for access satus variables.
  */
